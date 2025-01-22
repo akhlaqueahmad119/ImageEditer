@@ -7,9 +7,31 @@ function CaptionPage({ image, onBack }) {
   const fabricCanvasRef = useRef(null);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
+  const [canvasDimensions, setCanvasDimensions] = useState({
+    width: window.innerWidth * 0.8, 
+    height: window.innerHeight * 0.6, 
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setCanvasDimensions({
+        width: window.innerWidth * 0.8,
+        height: window.innerHeight * 0.6,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     if (!fabricCanvasRef.current) {
-      const fabricCanvas = new fabric.Canvas(canvasRef.current);
+      const fabricCanvas = new fabric.Canvas(canvasRef.current, {
+        width: canvasDimensions.width,
+        height: canvasDimensions.height,
+      });
       fabricCanvasRef.current = fabricCanvas;
     }
 
@@ -21,7 +43,7 @@ function CaptionPage({ image, onBack }) {
       fabric.Image.fromURL(image, { crossOrigin: "anonymous" })
         .then((img) => {
           if (img) {
-            img.scaleToWidth(500);
+            img.scaleToWidth(500); 
             fabricCanvas.add(img);
             fabricCanvas.renderAll();
             setIsImageLoaded(true);
@@ -40,7 +62,7 @@ function CaptionPage({ image, onBack }) {
         fabricCanvasRef.current = null;
       }
     };
-  }, [image, isImageLoaded]);
+  }, [image, isImageLoaded, canvasDimensions]);
 
   const addText = () => {
     const fabricCanvas = fabricCanvasRef.current;
@@ -126,7 +148,12 @@ function CaptionPage({ image, onBack }) {
 
   return (
     <div className={styles.captionPage}>
-      <canvas ref={canvasRef} width={600} height={400}></canvas>
+      <canvas
+        ref={canvasRef}
+        width={canvasDimensions.width}
+        height={canvasDimensions.height}
+        style={{ width: "100%", height: "100%" }}
+      ></canvas>
       <div>
         <button onClick={onBack}>Back</button>
         <button onClick={addText}>Add Caption</button>
