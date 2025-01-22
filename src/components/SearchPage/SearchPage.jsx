@@ -54,9 +54,9 @@ function SearchPage({ onSelectImage }) {
     <div className={styles.searchPage}>
       <div className={styles.header}>
         <p className={styles.userInfo}>
-          <strong>Name:</strong> John Doe
+          <strong>Name:</strong> Akhlaque Ahmad
           <br />
-          <strong>Email:</strong> john.doe@example.com
+          <strong>Email:</strong> akhlaque0979@gmail.com
         </p>
       </div>
 
